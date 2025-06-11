@@ -1,0 +1,11 @@
+.wxd-element-menu {
+  .ant-menu {
+    overflow-y: auto;
+    padding-top: 1rem;
+  }
+
+  & > div,
+  & > div > div {
+    height: 100%;
+  }
+}

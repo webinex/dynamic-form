@@ -1,0 +1,22 @@
+.wxd-designer-state {
+  pre {
+    margin-block: 0;
+    background-color: #eee;
+    padding: 10px;
+  }
+}
+
+.wxd-designer-state-tabs {
+  width: 100%;
+  border: 1px solid #eee;
+  text-transform: uppercase;
+  font-weight: 500;
+
+  .ant-radio-button-wrapper {
+    border: none;
+
+    &::before {
+      display: none;
+    }
+  }
+}

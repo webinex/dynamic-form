@@ -1,0 +1,41 @@
+.wxd-element-list-item {
+  width: 100%;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    .wxd-element-list-item-control-block {
+      opacity: 1;
+      pointer-events: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    background-color: #fcfcfc;
+  }
+
+  &.--selected {
+    background-color: #f1f7ff;
+  }
+
+  &.--appearance-animation-shown {
+    background-color: #f4fdfa;
+  }
+}
+
+.wxd-element-list-item-control-block {
+  position: absolute;
+  top: -5px;
+  right: 5px;
+  padding: 5px 15px;
+  z-index: 3;
+  background-color: white;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  // animation
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}

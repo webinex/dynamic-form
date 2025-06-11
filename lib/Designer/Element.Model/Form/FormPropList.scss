@@ -1,0 +1,15 @@
+.wxd-form-prop-list-item {
+  .ant-form-item {
+    width: 100%;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.wxd-form-prop-list {
+  .ant-list-footer {
+    padding-bottom: 0;
+  }
+}

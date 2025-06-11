@@ -1,0 +1,52 @@
+.wxd-designer {
+  display: flex;
+  flex-flow: column nowrap;
+  border-bottom: 1px solid #eee;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .ant-form-item.wxd-no-error-message {
+    margin-bottom: 0 !important;
+  }
+
+  .ant-row {
+    flex: 1;
+  }
+}
+
+.wxd-designer-menu-section {
+  width: 250px;
+
+  .ant-menu {
+    padding-top: 1rem;
+  }
+}
+
+.wxd-designer-main-section {
+  width: 0;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.wxd-designer-element-list-section {
+  padding-inline: 2rem;
+  flex: 1;
+}
+
+.wxd-designer-state-section {
+  margin-top: 1rem;
+  flex: none;
+
+  .wxd-designer-state-tabs {
+    border-left: none;
+    border-right: none;
+  }
+}
+
+.wxd-designer-element-model-section {
+  width: 500px;
+  border-left: 1px solid #eee;
+  border-bottom: none;
+}

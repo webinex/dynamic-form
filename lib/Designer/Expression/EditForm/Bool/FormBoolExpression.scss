@@ -1,0 +1,28 @@
+.form-bool-expression-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 2rem;
+  position: relative;
+
+  border-left: 1px solid #eee;
+  padding-left: 12px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 1px;
+    width: 3px;
+    background-color: #eee;
+  }
+
+  &::before {
+    top: 0;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+}
