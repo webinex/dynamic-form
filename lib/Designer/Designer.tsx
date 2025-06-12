@@ -1,7 +1,7 @@
 import './Designer.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Model } from '@/Model';
-import { Affix, Col, Row } from 'antd';
+import { Affix, Col, Row, Splitter } from 'antd';
 import { ElementMenu } from './Element.Menu';
 import { DesignerContextProvider, DesignerContextProviderProps, useDesignerContext } from './DesignerContext';
 import { ElementModelDesigner } from './Element.Model';
@@ -13,6 +13,7 @@ import { DesignerGroup } from './DesignerGroup';
 import { clx } from '@/clx';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
 import classNames from 'classnames';
+import { useLocalStorageBool } from '@/util';
 
 export interface DesignerProps extends Pick<DesignerContextProviderProps, 'model' | 'Elements'> {
   onChange: DesignerContextProviderProps['set'];
@@ -50,7 +51,13 @@ function useDesignerState(props: DesignerProps) {
     setAnimate(true);
   }, []);
 
-  return { ...props, onChange, selected, onSelect: setSelected, animate };
+  return {
+    ...props,
+    onChange,
+    selected,
+    onSelect: setSelected,
+    animate,
+  };
 }
 
 function ElementModelSection(props: Pick<DesignerProps, 'offsetTop'>) {
@@ -66,6 +73,11 @@ const DesignerComponent = DynamicFormTheme.flexy('Designer', (props: DesignerPro
   const { onChange, selected, onSelect, animate } = useDesignerState(props);
   const initialValues = useMemo(() => ModelUtil.initialValue(model), [model]);
 
+  const [elementMenuCollapsed, setElementMenuCollapsed] = useLocalStorageBool(
+    '@webinex/dynamic-form://element-menu-expanded',
+    false,
+  );
+
   return (
     <DesignerContextProvider
       Elements={Elements}
@@ -77,32 +89,43 @@ const DesignerComponent = DynamicFormTheme.flexy('Designer', (props: DesignerPro
       <div className={classNames(clx('designer'), className)} style={style}>
         <Row>
           <Col flex="none" className={clx('designer-menu-section')}>
-            <ElementMenu offsetTop={offsetTop} />
+            <ElementMenu
+              offsetTop={offsetTop}
+              collapsed={elementMenuCollapsed}
+              onCollapsedChange={setElementMenuCollapsed}
+            />
           </Col>
           <Col flex="auto" className={clx('designer-main-section')}>
-            <Formik
-              uid="designer-element-list"
-              type="formik"
-              layout="vertical"
-              initialValues={initialValues}
-              onSubmit={EMPTY_SUBMIT}
-              enableReinitialize
-            >
-              <>
-                <div className={clx('designer-element-list-section')}>
-                  <ElementList animate={animate} />
-                </div>
-                <div className={clx('designer-state-section')}>
-                  <DesignerState />
-                </div>
-              </>
-            </Formik>
+            <Splitter>
+              <Splitter.Panel min={500} defaultSize="70%">
+                <Formik
+                  uid="designer-element-list"
+                  type="formik"
+                  layout="vertical"
+                  initialValues={initialValues}
+                  onSubmit={EMPTY_SUBMIT}
+                  enableReinitialize
+                >
+                  <>
+                    <div className={clx('designer-element-list-section')}>
+                      <ElementList animate={animate} />
+                    </div>
+                    <div className={clx('designer-state-section')}>
+                      <DesignerState />
+                    </div>
+                  </>
+                </Formik>
+              </Splitter.Panel>
+
+              {selected && (
+                <Splitter.Panel defaultSize="30%" min={300}>
+                  <Col flex="none" className={clx('designer-element-model-section')}>
+                    <ElementModelSection offsetTop={offsetTop} />
+                  </Col>
+                </Splitter.Panel>
+              )}
+            </Splitter>
           </Col>
-          {selected && (
-            <Col flex="none" className={clx('designer-element-model-section')}>
-              <ElementModelSection offsetTop={offsetTop} />
-            </Col>
-          )}
         </Row>
       </div>
     </DesignerContextProvider>

@@ -14,10 +14,25 @@
   .ant-row {
     flex: 1;
   }
+
+  .ant-splitter-bar {
+    border-left: 1px solid #eee;
+    border-bottom: none;
+  }
+
+  .ant-splitter-bar-dragger {
+    &::before {
+      width: 1px;
+    }
+
+    &:not(.ant-splitter-bar-dragger-active)::before {
+      background: none !important;
+    }
+  }
 }
 
 .wxd-designer-menu-section {
-  width: 250px;
+  flex: none;
 
   .ant-menu {
     padding-top: 1rem;
@@ -43,10 +58,4 @@
     border-left: none;
     border-right: none;
   }
-}
-
-.wxd-designer-element-model-section {
-  width: 500px;
-  border-left: 1px solid #eee;
-  border-bottom: none;
 }

@@ -18,16 +18,18 @@ export interface DynamicFormProps {
   renderElement?: typeof renderDynamicFormElement;
 }
 
-function useSchema(model: Model, Elements: ElementBase[]) {
-  const findElement = useCallback((id: string) => Elements.find((el) => el.id === id)!, [Elements]);
+function createSchema(model: Model, Elements: ElementBase[]) {
+  const findElement = (id: string) => Elements.find((el) => el.id === id)!;
 
-  return useMemo(() => {
-    return Yup.object(
-      Object.fromEntries(
-        model.elements.map((x) => [x.id, ModelUtil.schemaOf(x, findElement(x.element))] as const),
-      ),
-    );
-  }, [model, findElement]);
+  return Yup.object(
+    Object.fromEntries(
+      model.elements.map((x) => [x.id, ModelUtil.schemaOf(x, findElement(x.element))] as const),
+    ),
+  );
+}
+
+function useSchema(model: Model, Elements: ElementBase[]) {
+  return useMemo(() => createSchema(model, Elements), [model, Elements]);
 }
 
 function Element(props: RenderDynamicFormElementArgs & Pick<DynamicFormProps, 'renderElement'>) {
@@ -46,9 +48,14 @@ function Element(props: RenderDynamicFormElementArgs & Pick<DynamicFormProps, 'r
   return renderElement({ ...args });
 }
 
-function Content(props: Pick<DynamicFormProps, 'model' | 'renderElement' | 'Elements'>) {
-  const { model, renderElement, Elements } = props;
-  const { values } = useFormikContext<any>();
+export interface DynamicFormFieldSetProps
+  extends Pick<DynamicFormProps, 'Elements' | 'model' | 'renderElement'> {
+  values: any;
+  namePrefix?: string;
+}
+
+function DynamicFormFieldSet(props: DynamicFormFieldSetProps) {
+  const { model, renderElement, Elements, values, namePrefix } = props;
 
   const isShown = useCallback(
     (el: ModelElement) => !el.condition || ExpressionUtil.exec(el.condition, values),
@@ -65,11 +72,42 @@ function Content(props: Pick<DynamicFormProps, 'model' | 'renderElement' | 'Elem
         model={model}
         modelElement={element}
         values={values}
+        namePrefix={namePrefix}
       />
     ));
 }
 
-export function DynamicForm(props: DynamicFormProps) {
+type ContentProps = Pick<DynamicFormProps, 'Elements' | 'model' | 'renderElement'>;
+
+function Content(props: ContentProps) {
+  const { model, renderElement, Elements } = props;
+  const { values } = useFormikContext<any>();
+  return (
+    <DynamicFormFieldSet model={model} Elements={Elements} renderElement={renderElement} values={values} />
+  );
+}
+
+export interface DynamicFormFieldProps
+  extends Pick<DynamicFormProps, 'Elements' | 'model' | 'renderElement'> {
+  name: string;
+}
+
+function DynamicFormField(props: DynamicFormFieldProps) {
+  const { name, Elements, model, renderElement } = props;
+  const [{ value }] = useField(name);
+
+  return (
+    <DynamicFormFieldSet
+      Elements={Elements}
+      model={model}
+      values={value}
+      renderElement={renderElement}
+      namePrefix={name}
+    />
+  );
+}
+
+function DynamicFormComponent(props: DynamicFormProps) {
   const { uid = 'dynamic-form', Elements, model, initialValue, onSubmit, className, renderElement } = props;
   const schema = useSchema(model, Elements);
 
@@ -89,3 +127,10 @@ export function DynamicForm(props: DynamicFormProps) {
     </div>
   );
 }
+
+export const DynamicForm = Object.assign(DynamicFormComponent, {
+  createSchema,
+  useSchema,
+  Field: DynamicFormField,
+  FieldSet: DynamicFormFieldSet,
+});

@@ -1,9 +1,11 @@
 import * as Yup from 'yup';
 import { createElement } from './ElementBase';
 import { Form } from '@webinex/antik';
+import { BarsOutlined } from '@ant-design/icons';
 
 export const Select = createElement({
   id: 'Select',
+  icon: <BarsOutlined />,
   props: Yup.object({
     title: Yup.string().required().default('Select').label('Title'),
     options: Yup.array().of(Yup.string().required()).required().default(['A', 'B', 'C']).label('Options'),

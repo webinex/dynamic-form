@@ -2,10 +2,23 @@
   .ant-menu {
     overflow-y: auto;
     padding-top: 1rem;
+    border-inline-end: none !important;
+
+    &.ant-menu-inline-collapsed {
+      .ant-menu-item-group-title {
+        text-align: center;
+      }
+    }
   }
 
-  & > div,
-  & > div > div {
-    height: 100%;
+  border-right: 1px solid #eee;
+
+  .wxd-element-menu-toggle-container {
+    text-align: center;
+    width: 100%;
+
+    .wxd-element-menu-toggle {
+      font-size: 1.2rem;
+    }
   }
 }

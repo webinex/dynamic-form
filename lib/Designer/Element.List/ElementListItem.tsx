@@ -5,7 +5,7 @@ import { useDesignerContext } from '@/Designer/DesignerContext';
 import classNames from 'classnames';
 import { ElementListItemControlBlock } from './ElementListItemControlBlock';
 import { Typography } from 'antd';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
 import { clx } from '@/clx';
 
@@ -33,6 +33,14 @@ export const ElementListItem = DynamicFormTheme.flexy('ElementListItem', (props:
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onClick = useCallback(() => {
+    if (selected === element.id) {
+      select(null);
+    } else {
+      select(element.id);
+    }
+  }, [select, selected, element.id]);
+
   return (
     <div
       ref={ref}
@@ -40,7 +48,7 @@ export const ElementListItem = DynamicFormTheme.flexy('ElementListItem', (props:
         '--selected': selected === element.id,
         '--appearance-animation-shown': animate && isAppearanceAnimationShown,
       })}
-      onClick={() => select(element.id)}
+      onClick={onClick}
     >
       <ElementListItemControlBlock element={element} />
       <ErrorBoundary fallback={<Typography.Text type="danger">Error</Typography.Text>}>

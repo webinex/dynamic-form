@@ -2,7 +2,7 @@
   "name": "@webinex/dynamic-form",
   "description": "Dynamic Form for @webinex/antik",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -22,7 +22,7 @@
     "gh-pages:deploy": "gh-pages --branch demo -d .gh-pages",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "yarn run build",
     "prettier": "prettier . --write"
   },
   "peerDependencies": {

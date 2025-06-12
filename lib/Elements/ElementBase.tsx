@@ -25,6 +25,11 @@ export interface ElementBase<TPropsSchema extends Yup.ObjectSchema<Yup.AnyObject
   title?: string;
 
   /**
+   * Icon to be displayed in element list.
+   */
+  icon?: React.ReactNode;
+
+  /**
    * Component that will be rendered in the form.
    * It receives props that are defined in the `props` schema, along with `name` and `required`.
    */
