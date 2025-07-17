@@ -2,10 +2,12 @@ import * as Yup from 'yup';
 import { createElement } from './ElementBase';
 import { Typography } from 'antd';
 import { Size, Style } from './Style';
+import { FontSizeOutlined } from '@ant-design/icons';
 
 export const Heading = createElement({
   id: 'Heading',
   value: 'readonly',
+  icon: <FontSizeOutlined />,
   props: Yup.object({
     level: Yup.number()
       .oneOf([1, 2, 3, 4, 5, 6])

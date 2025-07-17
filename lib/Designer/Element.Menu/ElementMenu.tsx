@@ -1,11 +1,12 @@
 import './ElementMenu.scss';
-import { Affix, Menu, MenuProps } from 'antd';
+import { Affix, Button, Divider, Menu, MenuProps } from 'antd';
 import { useDesignerContext } from '@/Designer/DesignerContext';
 import { useCallback, useMemo } from 'react';
 import { ElementBase } from '@/Elements';
 import classNames from 'classnames';
 import { clx } from '@/clx';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
+import { DoubleLeftOutlined, DoubleRightOutlined, FormOutlined } from '@ant-design/icons';
 
 export interface ElementMenuProps {
   /**
@@ -16,27 +17,36 @@ export interface ElementMenuProps {
    * @default undefined
    */
   offsetTop?: number;
+
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 function useMenuItems() {
   const { ElementsInput } = useDesignerContext();
 
   return useMemo(() => {
-    return ElementsInput.map((x) =>
-      Array.isArray(x)
-        ? {
-            type: 'group',
-            label: x[0],
-            key: x[0],
-            children: (x.slice(1) as ElementBase[]).map((x) => ({ key: x.id, label: x.title ?? x.id })),
-          }
-        : { key: x.id, label: x.title ?? x.id },
-    ) as NonNullable<MenuProps['items']>;
+    const mapElement = (el: ElementBase) => {
+      return { key: el.id, label: el.title ?? el.id, icon: el.icon ?? <FormOutlined /> };
+    };
+
+    const mapGroup = (el: [string, ...ElementBase[]]) => {
+      return {
+        type: 'group',
+        label: el[0],
+        key: el[0],
+        children: (el.slice(1) as ElementBase[]).map(mapElement),
+      };
+    };
+
+    return ElementsInput.map((x) => (Array.isArray(x) ? mapGroup(x) : mapElement(x))) as NonNullable<
+      MenuProps['items']
+    >;
   }, [ElementsInput]);
 }
 
 export const ElementMenu = DynamicFormTheme.flexy('ElementMenu', (props: ElementMenuProps) => {
-  const { offsetTop } = props;
+  const { offsetTop, collapsed = false, onCollapsedChange } = props;
   const { Elements, pushElement } = useDesignerContext();
   const items = useMenuItems();
 
@@ -48,18 +58,45 @@ export const ElementMenu = DynamicFormTheme.flexy('ElementMenu', (props: Element
     [Elements, pushElement],
   );
 
-  const menu = (
-    <Menu className={clx('h-full')} selectable={false} onClick={(e) => onPush(e.key)} items={items} />
+  const content = (
+    <div>
+      <Menu
+        key={String(collapsed)}
+        inlineCollapsed={collapsed}
+        className={clx('h-full')}
+        selectable={false}
+        onClick={(e) => onPush(e.key)}
+        items={items}
+        mode="vertical"
+      />
+
+      {onCollapsedChange && (
+        <div>
+          <Divider />
+          <div className={clx('element-menu-toggle-container')}>
+            <Button
+              color="default"
+              variant="text"
+              onClick={() => onCollapsedChange?.(!collapsed)}
+              className={clx('element-menu-toggle')}
+            >
+              {collapsed && <DoubleRightOutlined />}
+              {!collapsed && <DoubleLeftOutlined />}
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 
   return (
     <nav className={classNames(clx('element-menu'), clx('h-full'), { '--affix': offsetTop != null })}>
       {offsetTop != null && (
-        <Affix className={clx('h-full')} rootClassName={clx('h-full')} offsetTop={offsetTop}>
-          {menu}
+        <Affix key={String(collapsed)} offsetTop={offsetTop}>
+          {content}
         </Affix>
       )}
-      {offsetTop == null && menu}
+      {offsetTop == null && content}
     </nav>
   );
 });

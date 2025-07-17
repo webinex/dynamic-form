@@ -3,9 +3,11 @@ import { createElement } from './ElementBase';
 import { useField } from 'formik';
 import { Rate as _Rate } from 'antd';
 import { Form } from '@webinex/antik';
+import { StarOutlined } from '@ant-design/icons';
 
 export const Rate = createElement({
   id: 'Rate',
+  icon: <StarOutlined />,
   props: Yup.object({
     title: Yup.string().required().default('Rate').label('Title').meta({ description: 'Rate component' }),
     count: Yup.number().required().default(5).label('Count'),

@@ -8,7 +8,7 @@ export interface ElementListProps {
 }
 
 export const ElementList = DynamicFormTheme.flexy('ElementList', (props: ElementListProps) => {
-  const { model, select } = useDesignerContext();
+  const { model } = useDesignerContext();
   const { animate } = props;
 
   return (
@@ -17,7 +17,7 @@ export const ElementList = DynamicFormTheme.flexy('ElementList', (props: Element
         dataSource={model.elements}
         renderItem={(el) => {
           return (
-            <List.Item key={el.id} onClick={() => select(el.id)}>
+            <List.Item key={el.id}>
               <ElementListItem element={el} animate={animate} />
             </List.Item>
           );

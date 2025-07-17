@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 export function except<T>(array: readonly T[], ...values: readonly T[]): T[] {
   return array.filter((item) => !values.includes(item));
 }
@@ -87,4 +89,42 @@ export function parseIndex(name: string) {
     return parseInt(match[1], 10);
   }
   return null;
+}
+
+export function useLocalStorageState(key: string, initialValue: string) {
+  const [state, setState] = useState<string>(() => {
+    const storedValue = localStorage.getItem(key);
+    return storedValue !== null ? storedValue : initialValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, state);
+  }, [key, state]);
+
+  return [state, setState] as const;
+}
+
+export function useLocalStorageBool(key: string, initialValue: boolean) {
+  const [state, setState] = useLocalStorageState(key, initialValue ? 'true' : 'false');
+
+  const boolState = state === 'true';
+
+  const setBoolState = (value: boolean) => {
+    setState(value ? 'true' : 'false');
+  };
+
+  return [boolState, setBoolState] as const;
+}
+
+export function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return ((...args: Parameters<T>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  }) as T;
 }

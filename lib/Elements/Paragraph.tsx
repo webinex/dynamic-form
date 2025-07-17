@@ -2,10 +2,12 @@ import * as Yup from 'yup';
 import { createElement } from './ElementBase';
 import { Typography } from 'antd';
 import { Size, Style } from './Style';
+import { MenuOutlined } from '@ant-design/icons';
 
 export const Paragraph = createElement({
   id: 'Paragraph',
   value: 'readonly',
+  icon: <MenuOutlined />,
   props: Yup.object({
     text: Yup.string()
       .required()
