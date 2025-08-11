@@ -8,6 +8,7 @@ import { StarOutlined } from '@ant-design/icons';
 export const Rate = createElement({
   id: 'Rate',
   icon: <StarOutlined />,
+  value: 'number',
   props: Yup.object({
     title: Yup.string().required().default('Rate').label('Title').meta({ description: 'Rate component' }),
     count: Yup.number().required().default(5).label('Count'),

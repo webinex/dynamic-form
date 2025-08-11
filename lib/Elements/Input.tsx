@@ -23,13 +23,25 @@ export const Input = createElement({
     placeholder: Yup.string().label('Placeholder').nullable(),
     disabled: Yup.bool().nullable().default(null).label('Disabled When').meta({ control: 'expression' }),
   }),
-  Component: ({ title, name, placeholder, type, required, htmlType }) => {
+  Component: ({ title, name, placeholder, type, required, htmlType, disabled }) => {
     const [{ value }] = useField<string | undefined>(name);
 
     return (
       <Form.Item label={title} name={name} required={required}>
-        {type === 'textarea' && <Form.TextArea value={value ?? ''} placeholder={placeholder ?? undefined} />}
-        {type === 'input' && <Form.Input type={htmlType} placeholder={placeholder ?? undefined} />}
+        {type === 'textarea' && (
+          <Form.TextArea
+            value={value ?? ''}
+            placeholder={placeholder ?? undefined}
+            disabled={disabled ?? undefined}
+          />
+        )}
+        {type === 'input' && (
+          <Form.Input
+            type={htmlType}
+            placeholder={placeholder ?? undefined}
+            disabled={disabled ?? undefined}
+          />
+        )}
       </Form.Item>
     );
   },

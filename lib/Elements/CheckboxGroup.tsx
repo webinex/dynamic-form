@@ -8,6 +8,7 @@ export const CheckboxGroup = createElement({
   id: 'CheckboxGroup',
   title: 'Checkbox Group',
   icon: <CheckSquareOutlined />,
+  value: ['arrayOf', 'string'],
   props: Yup.object({
     title: Yup.string().default('Checkbox').label('Title').nullable(),
     description: Yup.string().nullable().default(null).label('Description'),
