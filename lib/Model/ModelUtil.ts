@@ -73,9 +73,14 @@ function schemaOf(model: ModelElement, Element: ElementBase) {
   return base;
 }
 
+function isShown(el: ModelElement, values: any) {
+  return !el.condition || ExpressionUtil.exec(el.condition, values);
+}
+
 export const ModelUtil = {
   initialValue,
   elementInitialValue,
   propsOf,
   schemaOf,
+  isShown,
 };

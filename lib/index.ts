@@ -2,6 +2,8 @@ import './styles.scss';
 export * from './Elements';
 export * from './Designer';
 export * from './DynamicForm';
+export * from './DynamicFormElement';
+export * from './DynamicFormFieldSet';
 export * from './Model';
 export * from './useDynamicForm';
 export * from './util';

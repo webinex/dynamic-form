@@ -1,13 +1,11 @@
 import './DesignerGroup.scss';
 import { Designer, DesignerProps } from './Designer';
-import { useEffect, useState } from 'react';
-import { Flex, Tabs } from 'antd';
-import { DynamicForm } from '@/DynamicForm';
-import { DesignerUtil } from './DesignerUtil';
-import { useDynamicForm } from '@/useDynamicForm';
+import { useEffect, useMemo, useState } from 'react';
+import { Tabs, TabsProps } from 'antd';
 import classNames from 'classnames';
 import { clx } from '@/clx';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
+import { DesignerGroupPreviewTabContent } from './DesignerGroupPreviewTabContent';
 
 export interface DesignerGroupProps extends DesignerProps {
   locationHash?: boolean;
@@ -15,25 +13,26 @@ export interface DesignerGroupProps extends DesignerProps {
   defaultTab?: 'form' | 'designer';
 }
 
-function DynamicFormTabContent(props: Pick<DesignerGroupProps, 'Elements' | 'model'>) {
-  const { model, Elements } = props;
-  const [state, setState] = useDynamicForm(model);
+function useTabs(props: DesignerGroupProps) {
+  const { locationHash: _, rootClassName, defaultTab, ...designerProps } = props;
+  const { Elements, model } = props;
 
-  return (
-    <Flex justify="center">
-      <DynamicForm
-        Elements={DesignerUtil.flattenElements(Elements)}
-        model={model}
-        initialValue={state}
-        onSubmit={setState}
-      />
-    </Flex>
+  return useMemo(
+    (): TabsProps['items'] => [
+      {
+        key: 'form',
+        label: 'Preview',
+        children: <DesignerGroupPreviewTabContent Elements={Elements} model={model} />,
+      },
+      { key: 'designer', label: 'Designer', children: <Designer {...designerProps} /> },
+    ],
+    [Elements, model, ...Object.keys(designerProps), ...Object.values(designerProps)],
   );
 }
 
 export const DesignerGroup = DynamicFormTheme.flexy('DesignerGroup', (props: DesignerGroupProps) => {
-  const { locationHash: _, rootClassName, defaultTab = 'designer', ...designerProps } = props;
-  const { locationHash, Elements, model } = props;
+  const { locationHash, rootClassName, defaultTab = 'designer' } = props;
+  const tabs = useTabs(props);
 
   const [tab, setTab] = useState<string>(
     window.location.hash.length > 0 ? window.location.hash.substring(1) : defaultTab,
@@ -46,18 +45,7 @@ export const DesignerGroup = DynamicFormTheme.flexy('DesignerGroup', (props: Des
 
   return (
     <div className={classNames(clx('designer-group'), rootClassName)}>
-      <Tabs
-        activeKey={tab}
-        onChange={setTab}
-        items={[
-          {
-            key: 'form',
-            label: 'Preview',
-            children: tab === 'form' && <DynamicFormTabContent Elements={Elements} model={model} />,
-          },
-          { key: 'designer', label: 'Designer', children: <Designer {...designerProps} /> },
-        ]}
-      />
+      <Tabs activeKey={tab} onChange={setTab} items={tabs} destroyInactiveTabPane />
     </div>
   );
 });

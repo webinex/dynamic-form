@@ -1096,15 +1096,15 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.5.13.tgz#87b309a6379c22b926e696893237826f64339b6f"
   integrity sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==
 
-"@webinex/antik@^1.1.2-build0":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@webinex/antik/-/antik-1.1.2.tgz#0344d79a238e6ddeca42eaa61096c24f6b62848f"
-  integrity sha512-waUJcc+Sbjqn4nRo0qUnQ/7qkt58HzF9f5Lor/toKkmST6UPazl+Rk3KZ5opZVUKLYwDx3v2FvpQza88Q3nMHg==
+"@webinex/antik@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@webinex/antik/-/antik-1.2.0.tgz#c3b72aea04092ae09cc5f2560b1d0b6208b26032"
+  integrity sha512-bhtIJH1XX8YEYbkwFxM8gS8it2u1ETreiZ2LYrO1hel7LK3/QcXKpGViG335m2jivmV6Vc1JwI2b0brRhRXW2A==
 
-"@webinex/flexy@^1.0.0-build1":
-  version "1.0.0-build1"
-  resolved "https://registry.yarnpkg.com/@webinex/flexy/-/flexy-1.0.0-build1.tgz#e61a093cd1619422644f0414db6e33e312063e15"
-  integrity sha512-78YlFaV0WfOG3942aptuZokkBNoVC34Vd3kZvGAZowA9OXYBMUaLdE4aXh1EQfF//FU6zD89w2uv2FMjXo1GPg==
+"@webinex/flexy@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webinex/flexy/-/flexy-1.0.0.tgz#43083047d66ff067524a61b3cd6d50e20cec094c"
+  integrity sha512-QhyPbmJT7dflmVfEQrFM9PgJZev7Rc2tQQCWa8/lkSX9v4MwyM6sf1fnzY+6/wMG5oedVokrr5UoJ/35KzVUiA==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"

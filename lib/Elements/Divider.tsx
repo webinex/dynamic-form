@@ -6,6 +6,7 @@ import { LineOutlined } from '@ant-design/icons';
 
 export const Divider = createElement({
   id: 'Divider',
+  value: 'readonly',
   icon: <LineOutlined />,
   props: Yup.object({
     marginTop: Yup.string<Size>()
@@ -18,10 +19,17 @@ export const Divider = createElement({
       .label('Margin Bottom')
       .default('none')
       .required(),
+    width: Yup.number().oneOf([1, 2, 3, 4, 5]).label('Width').default(1).required(),
   }),
-  Component: ({ marginBottom, marginTop }) => {
+  Component: ({ marginBottom, marginTop, width }) => {
     return (
-      <_Divider style={{ marginBottom: Style.margin[marginBottom], marginTop: Style.margin[marginTop] }} />
+      <_Divider
+        style={{
+          marginBottom: Style.margin[marginBottom],
+          marginTop: Style.margin[marginTop],
+          borderBlockStartWidth: width,
+        }}
+      />
     );
   },
 });
