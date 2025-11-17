@@ -14,6 +14,14 @@ export function swap<T>(array: T[], index1: number, index2: number): T[] {
   return newArray;
 }
 
+export function insertAfter<T>(array: readonly T[], index: number, item: T): T[] {
+  if (index < -1 || index >= array.length) {
+    throw new Error('Index out of bounds');
+  }
+
+  return [...array.slice(0, index + 1), item, ...array.slice(index + 1)];
+}
+
 /**
  * Parses a string path (e.g., "a.b[3].c") into an array of keys.
  * Supports nested object properties and array indices.
