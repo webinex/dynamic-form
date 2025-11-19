@@ -33,17 +33,18 @@ export type DesignerContextProviderProps = Pick<
   Elements: Array<ElementBase | [string, ...ElementBase[]]>;
 };
 
+function getElementNumber(id: string): number {
+  const n = Number(id.slice(2));
+  return Number.isFinite(n) ? n : 0;
+}
+
 export function getNextElementId(model: Model): string {
   const last = model.elements
     .filter((el) => el.id.startsWith('el'))
     .slice()
-    .sort((a, b) =>
-      b.id.length !== a.id.length
-        ? b.id.length - a.id.length
-        : b.id.substring(2).localeCompare(a.id.substring(2)),
-    )[0];
+    .sort((a, b) => getElementNumber(b.id) - getElementNumber(a.id))[0];
 
-  const nextNumber = last ? +last.id.substring(2) + 1 : 1;
+  const nextNumber = last ? getElementNumber(last.id) + 1 : 1;
   return `el${nextNumber}`;
 }
 
