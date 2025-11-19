@@ -65,12 +65,12 @@ function usePushElement(props: DesignerContextProviderProps) {
       const elements = model.elements;
       const selectedIndex = selectedId ? elements.findIndex((el) => el.id === selectedId) : -1;
 
-      const nextElements =
+      const newElements =
         selectedIndex >= 0 ? insertAfter(elements, selectedIndex, newElement) : [...elements, newElement];
 
       set({
         ...model,
-        elements: nextElements,
+        elements: newElements,
       });
 
       select?.(id);
@@ -94,12 +94,12 @@ function useDuplicateElement(props: DesignerContextProviderProps) {
       };
 
       const index = model.elements.findIndex((x) => x.id === el.id);
-      const nextElements =
+      const newElements =
         index >= 0 ? insertAfter(model.elements, index, newElement) : [...model.elements, newElement];
 
       set({
         ...model,
-        elements: nextElements,
+        elements: newElements,
       });
 
       select?.(id);

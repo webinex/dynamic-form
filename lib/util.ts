@@ -15,7 +15,7 @@ export function swap<T>(array: T[], index1: number, index2: number): T[] {
 }
 
 export function insertAfter<T>(array: readonly T[], index: number, item: T): T[] {
-  if (index < -1 || index >= array.length) {
+  if (index < 0 || index >= array.length) {
     throw new Error('Index out of bounds');
   }
 
