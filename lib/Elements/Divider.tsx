@@ -19,7 +19,7 @@ export const Divider = createElement({
       .label('Margin Bottom')
       .default('none')
       .required(),
-    width: Yup.number().oneOf([1, 2, 3, 4, 5]).label('Width').default(1).required(),
+    width: Yup.number().oneOf([1, 2, 3, 4, 5]).label('Width').default(3).required(),
   }),
   Component: ({ marginBottom, marginTop, width }) => {
     return (

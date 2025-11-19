@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback, useContext, useMemo } from 'reac
 import { ElementBase } from '@/Elements';
 import { Model, ModelElement, validateModelElementId } from '@/Model';
 import { DesignerUtil } from './DesignerUtil';
-import { swap } from '@/util';
+import { insertAfter, swap } from '@/util';
 import { ExpressionUtil } from '@/Model/Expression';
 
 export interface DesignerContextValue {
@@ -21,6 +21,7 @@ export interface DesignerContextValue {
   moveElementUp(element: ModelElement): void;
   moveElementDown(element: ModelElement): void;
   renameElement(id: string, newId: string): void;
+  duplicateElement(element: ModelElement): void;
 }
 
 export const DesignerContext = React.createContext<DesignerContextValue>(null!);
@@ -32,40 +33,79 @@ export type DesignerContextProviderProps = Pick<
   Elements: Array<ElementBase | [string, ...ElementBase[]]>;
 };
 
+function getElementNumber(id: string): number {
+  const n = Number(id.slice(2));
+  return Number.isFinite(n) ? n : 0;
+}
+
+export function getNextElementId(model: Model): string {
+  const last = model.elements
+    .filter((el) => el.id.startsWith('el'))
+    .slice()
+    .sort((a, b) => getElementNumber(b.id) - getElementNumber(a.id))[0];
+
+  const nextNumber = last ? getElementNumber(last.id) + 1 : 1;
+  return `el${nextNumber}`;
+}
+
 function usePushElement(props: DesignerContextProviderProps) {
-  const { model, set } = props;
+  const { model, set, selectedId, select } = props;
 
   return useCallback(
-    (x: ElementBase) => {
-      const last = model.elements
-        .filter((el) => el.id.startsWith('el'))
-        .slice()
-        .sort((a, b) =>
-          b.id.length != a.id.length
-            ? b.id.length - a.id.length
-            : b.id.substring(2).localeCompare(a.id.substring(2)),
-        )[0];
+    (elementBase: ElementBase) => {
+      const id = getNextElementId(model);
 
-      const nextNumber = last ? +last.id.substring(2) + 1 : 1;
-      const id = `el${nextNumber}`;
+      const newElement: ModelElement = {
+        id,
+        element: elementBase.id,
+        defaultValue: null,
+        ...DesignerUtil.initialValue(elementBase),
+        validation: null,
+      };
+
+      const elements = model.elements;
+      const selectedIndex = selectedId ? elements.findIndex((el) => el.id === selectedId) : -1;
+
+      const newElements =
+        selectedIndex >= 0 ? insertAfter(elements, selectedIndex, newElement) : [...elements, newElement];
 
       set({
         ...model,
-        elements: [
-          ...model.elements,
-          {
-            id,
-            element: x.id,
-            defaultValue: null,
-            ...DesignerUtil.initialValue(x),
-            validation: null,
-          },
-        ],
+        elements: newElements,
       });
+
+      select?.(id);
 
       return id;
     },
-    [model, set],
+    [model, set, selectedId, select],
+  );
+}
+
+function useDuplicateElement(props: DesignerContextProviderProps) {
+  const { model, set, select } = props;
+
+  return useCallback(
+    (el: ModelElement) => {
+      const id = getNextElementId(model);
+
+      const newElement: ModelElement = {
+        ...el,
+        id,
+      };
+
+      const index = model.elements.findIndex((x) => x.id === el.id);
+      const newElements =
+        index >= 0 ? insertAfter(model.elements, index, newElement) : [...model.elements, newElement];
+
+      set({
+        ...model,
+        elements: newElements,
+      });
+
+      select?.(id);
+    },
+    [model, set, select],
   );
 }
 
@@ -177,6 +217,7 @@ export function DesignerContextProvider(props: PropsWithChildren<DesignerContext
   const moveElementUp = useMoveElement(props, -1);
   const moveElementDown = useMoveElement(props, 1);
   const renameElement = useRenameElement(props);
+  const duplicateElement = useDuplicateElement(props);
   const ElementValues = useMemo(
     () => Elements.flatMap((x) => (Array.isArray(x) ? x.slice(1) : x)) as ElementBase[],
     [Elements],
@@ -200,6 +241,7 @@ export function DesignerContextProvider(props: PropsWithChildren<DesignerContext
           ElementValues.find((x) => x.id === model.elements.find((el) => el.id === selectedId)?.element) ??
           null,
         renameElement,
+        duplicateElement,
       }) satisfies DesignerContextValue,
     [
       Elements,
@@ -213,6 +255,7 @@ export function DesignerContextProvider(props: PropsWithChildren<DesignerContext
       select,
       selectedId,
       renameElement,
+      duplicateElement,
     ],
   );
 

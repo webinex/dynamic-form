@@ -1,6 +1,6 @@
 import './ElementList.scss';
 import { Button, Tag } from 'antd';
-import { ArrowDownOutlined, ArrowUpOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ModelElement } from '@/Model';
 import { useDesignerContext } from '@/Designer/DesignerContext';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
@@ -14,7 +14,7 @@ export const ElementListItemControlBlock = DynamicFormTheme.flexy(
   'ElementListItemControlBlock',
   (props: ElementListItemControlBlockProps) => {
     const { element } = props;
-    const { removeElement, moveElementUp, moveElementDown } = useDesignerContext();
+    const { removeElement, moveElementUp, moveElementDown, duplicateElement } = useDesignerContext();
 
     return (
       <div className={clx('element-list-item-control-block')}>
@@ -25,6 +25,12 @@ export const ElementListItemControlBlock = DynamicFormTheme.flexy(
           key="down"
           onClick={() => moveElementDown(element)}
           icon={<ArrowDownOutlined />}
+        />
+        <Button
+          type="link"
+          key="duplicate"
+          onClick={() => duplicateElement(element)}
+          icon={<CopyOutlined />}
         />
         <Button type="link" key="remove" onClick={() => removeElement(element)} icon={<DeleteOutlined />} />
       </div>

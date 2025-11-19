@@ -24,7 +24,9 @@ export const ElementListItem = DynamicFormTheme.flexy('ElementListItem', (props:
   const Element = def!.Component;
 
   useLayoutEffect(() => {
-    if (animate) ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (animate && selected === element.id) {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
