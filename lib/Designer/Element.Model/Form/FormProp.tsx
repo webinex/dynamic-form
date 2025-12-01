@@ -50,7 +50,9 @@ export const FormProp = DynamicFormTheme.flexy(
     }
 
     if (description.type === 'string' && description.meta?.control === 'textarea') {
-      return createFormItemElement(<Form.TextArea autoSize={{ minRows: 4, maxRows: 10 }} />);
+      return createFormItemElement(
+        <Form.TextArea autoSize={{ minRows: 4, maxRows: 10 }} autoFocus={description.meta?.autoFocus} />,
+      );
     }
 
     if (description.type === 'boolean' && description.meta?.control === 'expression') {
@@ -58,7 +60,7 @@ export const FormProp = DynamicFormTheme.flexy(
     }
 
     if (description.type === 'string') {
-      return createFormItemElement(<Form.Input />);
+      return createFormItemElement(<Form.Input autoFocus={description.meta?.autoFocus} />);
     }
 
     if (description.type === 'array' && SchemaUtil.isArrayOfDescription(description)) {
