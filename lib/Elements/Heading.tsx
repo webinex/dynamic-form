@@ -15,7 +15,11 @@ export const Heading = createElement({
       .default(1)
       .label('Size')
       .meta({ description: 'Heading level (1-6)' }),
-    text: Yup.string().required().default('Heading').label('Text').meta({ description: 'Heading text' }),
+    text: Yup.string()
+      .required()
+      .default('Heading')
+      .label('Text')
+      .meta({ description: 'Heading text', autoFocus: true }),
     marginTop: Yup.string<Size>()
       .oneOf(Object.keys(Style.margin) as Size[])
       .label('Margin Top')
