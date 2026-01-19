@@ -17,7 +17,12 @@ export const FormBoolExpressionAddButton = DynamicFormTheme.flexy(
           ...value,
           expressions: [
             ...value.expressions,
-            { type: 'BinaryExpression', operator: '=', left: null!, right: null! },
+            {
+              type: 'BinaryExpression',
+              operator: '=',
+              left: { type: 'ReferenceExpression', ref: null! },
+              right: null!,
+            },
           ],
         }),
       [value, setValue],

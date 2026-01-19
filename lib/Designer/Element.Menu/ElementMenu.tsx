@@ -67,7 +67,7 @@ export const ElementMenu = DynamicFormTheme.flexy('ElementMenu', (props: Element
         selectable={false}
         onClick={(e) => onPush(e.key)}
         items={items}
-        mode="vertical"
+        mode="inline"
       />
 
       {onCollapsedChange && (

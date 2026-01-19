@@ -2,19 +2,26 @@ import * as Yup from 'yup';
 import { createElement } from './ElementBase';
 import { Typography } from 'antd';
 import { Form } from '@webinex/antik';
-import { CheckSquareOutlined } from '@ant-design/icons';
+import { BlockOutlined } from '@ant-design/icons';
+import { DesignerPropMeta, DesignerPropsObjectMeta } from '@/Designer/DesignerMeta';
 
 export const CheckboxGroup = createElement({
   id: 'CheckboxGroup',
   title: 'Checkbox Group',
-  icon: <CheckSquareOutlined />,
+  icon: <BlockOutlined />,
   value: ['arrayOf', 'string'],
   props: Yup.object({
     title: Yup.string().default('Checkbox').label('Title').nullable(),
     description: Yup.string().nullable().default(null).label('Description'),
     options: Yup.array().of(Yup.string().required()).required().default(['A', 'B', 'C']).label('Options'),
-    disabled: Yup.bool().nullable().default(null).label('Disabled When').meta({ control: 'expression' }),
-  }),
+    disabled: Yup.bool()
+      .nullable()
+      .default(null)
+      .label('Disabled When')
+      .meta({ control: 'expression' } satisfies DesignerPropMeta),
+  }).meta({
+    constantExpressionControl: { type: 'select', options: 'options' },
+  } satisfies DesignerPropsObjectMeta),
   Component: ({ title, description, options, name, disabled }) => {
     const label = (
       <div>

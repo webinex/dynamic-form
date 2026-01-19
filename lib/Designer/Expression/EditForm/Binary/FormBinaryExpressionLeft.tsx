@@ -2,7 +2,7 @@ import { DynamicFormTheme } from '@/DynamicFormTheme';
 import { CallExpression, ReferenceExpression } from '@/Model';
 import { useField } from 'formik';
 import { FormReferenceExpression } from '../Reference';
-import { Select, Space } from 'antd';
+import { Flex, Select } from 'antd';
 import { useCallback } from 'react';
 
 export interface FormBinaryExpressionLeftProps {
@@ -55,17 +55,18 @@ export const FormBinaryExpressionLeft = DynamicFormTheme.flexy(
     const onValueChange = useValueChange(props);
 
     return (
-      <Space>
+      <Flex gap={10} wrap="nowrap">
         <FormControl name={name} />
         <Select<ValueType, OptionType>
           value={value.type === 'ReferenceExpression' ? 'value' : 'len'}
           onChange={onValueChange}
+          style={{ minWidth: 100 }}
           options={[
             { value: 'value', label: 'Value' },
             { value: 'len', label: 'Length()' },
           ]}
         />
-      </Space>
+      </Flex>
     );
   },
 );

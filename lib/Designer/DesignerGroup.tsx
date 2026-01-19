@@ -11,10 +11,15 @@ export interface DesignerGroupProps extends DesignerProps {
   locationHash?: boolean;
   rootClassName?: string;
   defaultTab?: 'form' | 'designer';
+
+  /**
+   * When true, hides the controls in the designer preview tab.
+   */
+  noPreviewControls?: boolean;
 }
 
 function useTabs(props: DesignerGroupProps) {
-  const { locationHash: _, rootClassName, defaultTab, ...designerProps } = props;
+  const { locationHash: _, rootClassName, defaultTab, noPreviewControls, ...designerProps } = props;
   const { Elements, model } = props;
 
   return useMemo(
@@ -22,7 +27,13 @@ function useTabs(props: DesignerGroupProps) {
       {
         key: 'form',
         label: 'Preview',
-        children: <DesignerGroupPreviewTabContent Elements={Elements} model={model} />,
+        children: (
+          <DesignerGroupPreviewTabContent
+            Elements={Elements}
+            model={model}
+            noPreviewControls={noPreviewControls}
+          />
+        ),
       },
       { key: 'designer', label: 'Designer', children: <Designer {...designerProps} /> },
     ],

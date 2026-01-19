@@ -42,7 +42,7 @@ export const EditExpressionModal = DynamicFormTheme.flexy(
         onCancel={onClose}
         onOk={submitForm}
         width="80%"
-        style={{ maxWidth: 1000 }}
+        style={{ maxWidth: 1500 }}
         className={clx('edit-expression-modal')}
       >
         <ExpressionForm initialValue={formValue} onSubmit={onSubmit} />

@@ -1,5 +1,5 @@
 import './Designer.scss';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Model } from '@/Model';
 import { Affix, Col, Row, Splitter } from 'antd';
 import { ElementMenu } from './Element.Menu';
@@ -7,8 +7,6 @@ import { DesignerContextProvider, DesignerContextProviderProps, useDesignerConte
 import { ElementModelDesigner } from './Element.Model';
 import { ElementList } from './Element.List';
 import { DesignerState } from './State';
-import { ModelUtil } from '@/Model/ModelUtil';
-import { Formik } from 'formik';
 import { DesignerGroup } from './DesignerGroup';
 import { clx } from '@/clx';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
@@ -28,8 +26,6 @@ export interface DesignerProps extends Pick<DesignerContextProviderProps, 'model
   style?: React.CSSProperties;
   className?: string;
 }
-
-const EMPTY_SUBMIT = () => {};
 
 function useDesignerState(props: DesignerProps) {
   const { onChange: onChangeProp } = props;
@@ -71,7 +67,6 @@ function ElementModelSection(props: Pick<DesignerProps, 'offsetTop'>) {
 const DesignerComponent = DynamicFormTheme.flexy('Designer', (props: DesignerProps) => {
   const { Elements, model, offsetTop, className, style } = props;
   const { onChange, selected, onSelect, animate } = useDesignerState(props);
-  const initialValues = useMemo(() => ModelUtil.initialValue(model), [model]);
 
   const [elementMenuCollapsed, setElementMenuCollapsed] = useLocalStorageBool(
     '@webinex/dynamic-form://element-menu-expanded',
@@ -98,23 +93,12 @@ const DesignerComponent = DynamicFormTheme.flexy('Designer', (props: DesignerPro
           <Col flex="auto" className={clx('designer-main-section')}>
             <Splitter>
               <Splitter.Panel min={500} defaultSize="70%">
-                <Formik
-                  uid="designer-element-list"
-                  type="formik"
-                  layout="vertical"
-                  initialValues={initialValues}
-                  onSubmit={EMPTY_SUBMIT}
-                  enableReinitialize
-                >
-                  <>
-                    <div className={clx('designer-element-list-section')}>
-                      <ElementList animate={animate} />
-                    </div>
-                    <div className={clx('designer-state-section')}>
-                      <DesignerState />
-                    </div>
-                  </>
-                </Formik>
+                <div className={clx('designer-element-list-section')}>
+                  <ElementList animate={animate} />
+                </div>
+                <div className={clx('designer-state-section')}>
+                  <DesignerState />
+                </div>
               </Splitter.Panel>
 
               {selected && (

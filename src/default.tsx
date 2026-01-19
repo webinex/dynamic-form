@@ -29,16 +29,33 @@ export const DEFAULT_MODEL: Model = {
     {
       id: 'gender',
       element: 'RadioGroup',
-      defaultValue: null,
+      defaultValue: 'Male',
       props: {
-        condition: null,
-        disabled: null,
+        optionType: 'default',
         options: ['Male', 'Female', 'Other'],
         title: 'Gender',
+        condition: null,
+        disabled: null,
       },
       validation: [
         {
           type: 'required',
+        },
+      ],
+    },
+    {
+      id: 'dateOfBirth',
+      element: 'DateTimePicker',
+      defaultValue: null,
+      props: {
+        disabled: null,
+        type: 'date',
+        title: 'Date of Birth',
+      },
+      validation: [
+        {
+          type: 'required',
+          message: null,
         },
       ],
     },
@@ -167,6 +184,7 @@ export const DEFAULT_MODEL: Model = {
           },
         },
       ],
+      condition: null,
     },
     {
       id: 'maidenName',
@@ -297,15 +315,46 @@ export const DEFAULT_MODEL: Model = {
       ],
     },
     {
-      id: 'submitBtn',
-      element: 'SubmitButton',
+      id: 'licenses',
+      element: 'CheckboxGroup',
       defaultValue: null,
       props: {
-        align: 'right',
-        text: 'Submit',
-        type: 'primary',
+        disabled: null,
+        options: ['Psychology', 'Therapy', 'Surgery'],
+        description: null,
+        title: 'Licenses',
       },
       validation: null,
+    },
+    {
+      id: 'statesLicensed',
+      element: 'MultiSelect',
+      defaultValue: [],
+      props: {
+        disabled: null,
+        showSearch: true,
+        options: ['Alaska', 'Alabama', 'Washington'],
+        title: 'States Licensed (when any Licenses selected)',
+      },
+      validation: null,
+      condition: {
+        type: 'BinaryExpression',
+        operator: '>',
+        left: {
+          type: 'CallExpression',
+          function: 'len',
+          args: [
+            {
+              type: 'ReferenceExpression',
+              ref: 'licenses',
+            },
+          ],
+        },
+        right: {
+          type: 'ConstantExpression',
+          value: 0,
+        },
+      },
     },
   ],
 };

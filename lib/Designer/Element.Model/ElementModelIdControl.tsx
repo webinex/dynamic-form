@@ -7,7 +7,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
 
 function useEditValue(messageApi: MessageInstance) {
-  const { selectedId } = useDesignerContext();
+  const { selectedId, model } = useDesignerContext();
   const [isEdit, setEdit] = useState(false);
   const [idEditValue, setIdEditValue] = useState(selectedId);
   const { renameElement } = useDesignerContext();
@@ -23,6 +23,11 @@ function useEditValue(messageApi: MessageInstance) {
     const value = idEditValue?.trim();
     const error = validateModelElementId(value);
 
+    if (model.elements.some((el) => el.id === value) && value !== selectedId) {
+      messageApi.error('ID already exists');
+      return;
+    }
+
     if (error) {
       messageApi.error(error);
       return;
@@ -32,7 +37,7 @@ function useEditValue(messageApi: MessageInstance) {
       renameElement(selectedId!, value!);
     }
     setEdit(false);
-  }, [idEditValue, selectedId, renameElement, messageApi]);
+  }, [idEditValue, selectedId, renameElement, messageApi, model.elements]);
 
   return { selectedId, isEdit, toggleEdit, idEditValue, onIdEditValueChange: setIdEditValue, onSubmit };
 }
