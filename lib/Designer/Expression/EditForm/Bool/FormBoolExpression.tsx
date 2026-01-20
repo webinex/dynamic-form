@@ -28,7 +28,7 @@ export const FormBoolExpression = DynamicFormTheme.flexy(
         </Flex>
         <div className={clx('form-bool-expression-list')}>
           {value.expressions.map((_, index) => (
-            <FormExpression name={`${name}.expressions[${index}]`} />
+            <FormExpression name={`${name}.expressions[${index}]`} key={index} />
           ))}
           <div>
             <FormBoolExpressionAddButton name={name} />

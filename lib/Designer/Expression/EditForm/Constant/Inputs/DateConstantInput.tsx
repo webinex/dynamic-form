@@ -37,6 +37,7 @@ function useChange(props: DateConstantInputProps) {
       if ('tz' in dayjs) {
         const value = (date as any).tz(undefined, true).toDate();
         onChange(value);
+        return;
       }
 
       onChange(date.toDate());

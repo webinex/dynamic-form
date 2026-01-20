@@ -24,14 +24,14 @@ export const Select = createElement({
   }).meta({
     constantExpressionControl: { type: 'select', options: 'options' },
   } satisfies DesignerPropsObjectMeta),
-  Component: ({ title, options, name, disabled, required }) => {
+  Component: ({ title, options, name, disabled, required, showSearch }) => {
     return (
       <Form.Item label={title} name={name} required={required}>
         <Form.Select
           disabled={disabled ?? undefined}
           options={options.map((x) => ({ label: x, value: x }))}
           allowClear={!required}
-          showSearch
+          showSearch={showSearch ?? undefined}
         />
       </Form.Item>
     );

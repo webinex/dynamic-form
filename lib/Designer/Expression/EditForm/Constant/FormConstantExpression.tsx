@@ -23,7 +23,10 @@ function useResetWhenElementChange(props: FormConstantExpressionProps) {
   const prevElement = useRef(Element);
 
   useEffect(() => {
-    if (prevElement.current !== Element) setValue(null);
+    if (prevElement.current !== Element) {
+      setValue(null);
+      prevElement.current = Element;
+    }
   }, [Element, setValue]);
 }
 

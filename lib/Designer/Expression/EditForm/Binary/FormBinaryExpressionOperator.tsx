@@ -30,11 +30,10 @@ function useOperators(props: FormBinaryExpressionOperatorProps): BinaryOperator[
   return useMemo(() => {
     if (ExpressionUtil.isLenCallExpression(forProp)) return BINARY_OPERATOR_BY_TYPE['number'];
     if (!Element) return [];
-    if (Element && DesignerUtil.isOptionsElement(Element) && !DesignerUtil.isMultiElement(Element))
-      return ['=', '!='];
+    if (DesignerUtil.isOptionsElement(Element) && !DesignerUtil.isMultiElement(Element)) return ['=', '!='];
     const key = Array.isArray(Element?.value) ? 'arrayof' : (Element?.value ?? 'string');
     return BINARY_OPERATOR_BY_TYPE[key] ?? [];
-  }, [Element]);
+  }, [Element, forProp]);
 }
 
 function useResetOperatorWhenUnavailable(props: FormBinaryExpressionOperatorProps) {
