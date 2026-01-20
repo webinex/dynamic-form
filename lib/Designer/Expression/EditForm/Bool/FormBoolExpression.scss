@@ -1,4 +1,4 @@
-.form-bool-expression-list {
+.wxd-form-bool-expression-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -7,6 +7,8 @@
 
   border-left: 1px solid #eee;
   padding-left: 12px;
+  max-width: calc(100% - 2rem - 12px);
+  width: 100%;
 
   &::before,
   &::after {

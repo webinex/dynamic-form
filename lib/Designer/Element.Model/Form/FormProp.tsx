@@ -82,7 +82,7 @@ export const FormProp = DynamicFormTheme.flexy(
 
     if (description.type === 'boolean') {
       return createFormItemElement(
-        <Form.Checkbox>
+        <Form.Checkbox {...Form.Checkbox.defaultProps}>
           <FormPropLabel name={name} description={description} />
         </Form.Checkbox>,
         { label: false },

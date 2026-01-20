@@ -3,6 +3,7 @@ import { createElement } from './ElementBase';
 import { Typography } from 'antd';
 import { Size, Style } from './Style';
 import { MenuOutlined } from '@ant-design/icons';
+import { DesignerPropMeta } from '@/Designer/DesignerMeta';
 
 export const Paragraph = createElement({
   id: 'Paragraph',
@@ -13,7 +14,7 @@ export const Paragraph = createElement({
       .required()
       .default('Paragraph')
       .label('Text')
-      .meta({ description: 'Paragraph text', control: 'textarea' }),
+      .meta({ description: 'Paragraph text', control: 'textarea' } satisfies DesignerPropMeta),
     type: Yup.string()
       .oneOf(['default', 'secondary', 'success', 'warning', 'danger'])
       .default('default')

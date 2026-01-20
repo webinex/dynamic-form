@@ -3,6 +3,15 @@
     padding-block: 2rem;
     max-width: 800px;
     width: 100%;
+    position: relative;
+  }
+
+  .wxd-preview-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
   }
 
   .ant-tabs-nav {

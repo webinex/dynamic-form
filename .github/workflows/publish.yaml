@@ -13,6 +13,15 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@webinex'
       - run: yarn
-      - run: yarn publish
+
+      - name: Publish (stable)
+        if: ${{ !github.event.release.prerelease }}
+        run: yarn publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish (prerelease)
+        if: ${{ github.event.release.prerelease }}
+        run: yarn publish --tag next --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

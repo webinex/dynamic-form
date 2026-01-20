@@ -1,3 +1,5 @@
+import { ElementValueType } from '@/Elements';
+
 export type Expression =
   | BinaryExpression
   | ConstantExpression
@@ -5,28 +7,27 @@ export type Expression =
   | BoolExpression
   | CallExpression;
 
-export const BINARY_OPERATORS = [
-  '=',
-  '!=',
-  '>',
-  '<',
-  '>=',
-  '<=',
-  'contains',
-  'not contains',
-  'allof',
-  'anyof',
-] as const;
+export const BINARY_OPERATORS = ['=', '!=', '>', '<', '>=', '<=', 'contains', 'not contains'] as const;
 
 export const CALL_EXPRESSION_FUNCTIONS = ['len'] as const;
 export type CallExpressionFunction = (typeof CALL_EXPRESSION_FUNCTIONS)[number];
 
 export const BOOL_OPERATORS = ['and', 'or'] as const;
 
-export const COLLECTION_BINARY_OPERATORS: BinaryOperator[] = ['allof', 'anyof'];
+export const COLLECTION_BINARY_OPERATORS: BinaryOperator[] = [];
 
 export type BinaryOperator = (typeof BINARY_OPERATORS)[number];
 export type BoolOperator = (typeof BOOL_OPERATORS)[number];
+
+export const BINARY_OPERATOR_BY_TYPE: Record<ElementValueType | 'arrayof', BinaryOperator[]> = {
+  string: ['=', '!=', 'contains', 'not contains'],
+  boolean: ['=', '!='],
+  date: ['=', '!=', '>', '<', '>=', '<='],
+  number: ['=', '!=', '>', '<', '>=', '<='],
+  object: [],
+  readonly: [],
+  arrayof: ['=', '!=', 'contains', 'not contains'],
+};
 
 export interface ConstantExpression {
   type: 'ConstantExpression';
@@ -69,7 +70,40 @@ function isExpression(x: any): x is Expression {
   );
 }
 
-function exec(expression: Expression, values: any): any {
+function isReferenceExpression(x: Expression | null | undefined): x is ReferenceExpression {
+  return !!x && x.type === 'ReferenceExpression';
+}
+
+function isCallExpression(x: Expression | null | undefined): x is CallExpression {
+  return !!x && x.type === 'CallExpression';
+}
+
+function isLenCallExpression(x: Expression | null | undefined): x is CallExpression {
+  return isCallExpression(x) && x.function === 'len';
+}
+
+function eqArray(left: any[], right: any[], orderInsensitive: boolean) {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  if (orderInsensitive) {
+    const surplus = [...left];
+    return right.every((x) => {
+      const index = surplus.indexOf(x);
+      if (index >= 0) surplus.splice(index, 1);
+      else return false;
+    });
+  }
+
+  for (let i = 0; i < left.length; i++) {
+    if (left[i] !== right[i]) return false;
+  }
+
+  return true;
+}
+
+function exec(expression: Expression, values: any, options?: { orderInsensitive?: boolean }): any {
   switch (expression.type) {
     case 'ConstantExpression':
       return expression.value;
@@ -83,16 +117,35 @@ function exec(expression: Expression, values: any): any {
 
       switch (expression.operator) {
         case '=':
+          if (Array.isArray(leftValue) && Array.isArray(rightValue)) {
+            return eqArray(leftValue, rightValue, options?.orderInsensitive ?? false);
+          }
+
           return leftValue === rightValue;
         case '!=':
+          if (Array.isArray(leftValue) && Array.isArray(rightValue)) {
+            return !eqArray(leftValue, rightValue, options?.orderInsensitive ?? false);
+          }
           return leftValue !== rightValue;
         case '>':
+          if (leftValue == null || rightValue == null) {
+            return false;
+          }
           return leftValue > rightValue;
         case '<':
+          if (leftValue == null || rightValue == null) {
+            return false;
+          }
           return leftValue < rightValue;
         case '>=':
+          if (leftValue == null || rightValue == null) {
+            return false;
+          }
           return leftValue >= rightValue;
         case '<=':
+          if (leftValue == null || rightValue == null) {
+            return false;
+          }
           return leftValue <= rightValue;
         case 'contains': {
           if (typeof leftValue === 'string' || typeof rightValue === 'string') {
@@ -197,5 +250,8 @@ function visit(expression: Expression, visitor: (value: Expression) => Expressio
 export const ExpressionUtil = {
   exec,
   isExpression,
+  isReferenceExpression,
+  isCallExpression,
+  isLenCallExpression,
   visit,
 };

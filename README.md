@@ -9,3 +9,7 @@ TBD
 ## LICENSE
 
 Apache License 2.0
+
+### Props Meta
+
+[Type](./lib/Designer/DesignerMeta.ts)

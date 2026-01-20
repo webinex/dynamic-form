@@ -3,6 +3,7 @@ import { createElement } from './ElementBase';
 import { Form } from '@webinex/antik';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { RadioGroupProps } from 'antd';
+import { DesignerPropMeta, DesignerPropsObjectMeta } from '@/Designer/DesignerMeta';
 
 export const RadioGroup = createElement({
   id: 'RadioGroup',
@@ -16,14 +17,18 @@ export const RadioGroup = createElement({
       .default(['A', 'B', 'C'])
       .label('Options')
       .min(1, 'At least one option is required')
-      .meta({ description: 'Options for the radio group, each option is a string.' }),
+      .meta({
+        description: 'Options for the radio group, each option is a string.',
+      } satisfies DesignerPropMeta),
     optionType: Yup.string<NonNullable<RadioGroupProps['optionType']>>()
       .oneOf(['default', 'button'])
       .default('default')
       .nullable()
       .label('Option Type')
       .meta({ description: 'Type of radio options, either default or button.' }),
-  }),
+  }).meta({
+    constantExpressionControl: { type: 'select', options: 'options' },
+  } satisfies DesignerPropsObjectMeta),
   Component: ({ name, title, options, optionType, required }) => {
     return (
       <Form.Item name={name} label={title} required={required}>

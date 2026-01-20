@@ -22,6 +22,8 @@ export interface DesignerContextValue {
   moveElementDown(element: ModelElement): void;
   renameElement(id: string, newId: string): void;
   duplicateElement(element: ModelElement): void;
+  setElementDefaultValue(id: string, value: any): void;
+  resetElementDefaultValue(id: string): void;
 }
 
 export const DesignerContext = React.createContext<DesignerContextValue>(null!);
@@ -210,6 +212,20 @@ function useRenameElement(props: DesignerContextProviderProps) {
   );
 }
 
+function useResetElementDefaultValue(props: DesignerContextProviderProps) {
+  const setElementDefaultValue = useSetElementDefaultValue(props);
+  return useCallback((id: string) => setElementDefaultValue(id, null), [setElementDefaultValue]);
+}
+
+function useSetElementDefaultValue(props: DesignerContextProviderProps) {
+  const { model, set } = props;
+  return useCallback(
+    (id: string, value: any) =>
+      set({ elements: model.elements.map((x) => (x.id !== id ? x : { ...x, defaultValue: value })) }),
+    [model, set],
+  );
+}
+
 export function DesignerContextProvider(props: PropsWithChildren<DesignerContextProviderProps>) {
   const { children, Elements, model, set, selectedId, select } = props;
   const pushElement = usePushElement(props);
@@ -218,6 +234,9 @@ export function DesignerContextProvider(props: PropsWithChildren<DesignerContext
   const moveElementDown = useMoveElement(props, 1);
   const renameElement = useRenameElement(props);
   const duplicateElement = useDuplicateElement(props);
+  const setElementDefaultValue = useSetElementDefaultValue(props);
+  const resetElementDefaultValue = useResetElementDefaultValue(props);
+
   const ElementValues = useMemo(
     () => Elements.flatMap((x) => (Array.isArray(x) ? x.slice(1) : x)) as ElementBase[],
     [Elements],
@@ -242,6 +261,8 @@ export function DesignerContextProvider(props: PropsWithChildren<DesignerContext
           null,
         renameElement,
         duplicateElement,
+        resetElementDefaultValue,
+        setElementDefaultValue,
       }) satisfies DesignerContextValue,
     [
       Elements,

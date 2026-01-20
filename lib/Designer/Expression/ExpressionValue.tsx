@@ -16,13 +16,19 @@ export interface ExpressionValueProps {
 export const ConstantExpressionValue = DynamicFormTheme.flexy(
   'ConstantExpressionValue',
   (props: { value: ConstantExpression }) => {
-    const { value } = props;
+    const {
+      value: { value },
+    } = props;
 
-    if (Array.isArray(value.value)) {
-      return <span>{value.value.join(', ')}</span>;
+    if (value instanceof Date) {
+      return <span>date({value.toLocaleString()})</span>;
     }
 
-    return <span>{value.value}</span>;
+    if (Array.isArray(value)) {
+      return <span>{value.join(', ')}</span>;
+    }
+
+    return <span>{value}</span>;
   },
 );
 
@@ -34,7 +40,7 @@ export const BinaryExpressionValue = DynamicFormTheme.flexy(
     return (
       <span>
         {value.left ? <ExpressionValue value={value.left} /> : 'NULL'}
-        {` ${value.operator} `}
+        {` ${value.operator ?? ''} `}
         {value.right ? <ExpressionValue value={value.right} /> : 'NULL'}
       </span>
     );

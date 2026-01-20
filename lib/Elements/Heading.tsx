@@ -3,6 +3,7 @@ import { createElement } from './ElementBase';
 import { Typography } from 'antd';
 import { Size, Style } from './Style';
 import { FontSizeOutlined } from '@ant-design/icons';
+import { DesignerPropMeta } from '@/Designer/DesignerMeta';
 
 export const Heading = createElement({
   id: 'Heading',
@@ -14,12 +15,12 @@ export const Heading = createElement({
       .required()
       .default(1)
       .label('Size')
-      .meta({ description: 'Heading level (1-6)' }),
+      .meta({ description: 'Heading level (1-6)' } satisfies DesignerPropMeta),
     text: Yup.string()
       .required()
       .default('Heading')
       .label('Text')
-      .meta({ description: 'Heading text', autoFocus: true }),
+      .meta({ description: 'Heading text', autoFocus: true } satisfies DesignerPropMeta),
     marginTop: Yup.string<Size>()
       .oneOf(Object.keys(Style.margin) as Size[])
       .label('Margin Top')

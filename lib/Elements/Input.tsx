@@ -5,6 +5,7 @@ import { Form } from '@webinex/antik';
 
 export const Input = createElement({
   id: 'Input',
+  title: 'Text Input',
   props: Yup.object({
     title: Yup.string().required().default('Input').label('Title').meta({ description: 'Input field title' }),
     type: Yup.string<'input' | 'textarea'>()

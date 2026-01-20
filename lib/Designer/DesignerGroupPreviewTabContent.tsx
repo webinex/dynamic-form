@@ -1,34 +1,46 @@
 import './DesignerGroup.scss';
-import { DesignerProps } from './Designer';
 import { useState } from 'react';
-import { Divider, Flex, Radio } from 'antd';
+import { Checkbox, Flex, Radio } from 'antd';
 import { DynamicForm } from '@/DynamicForm';
 import { DesignerUtil } from './DesignerUtil';
 import { useDynamicForm } from '@/useDynamicForm';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
+import { DesignerGroupProps } from '@/Designer/DesignerGroup';
+import { useFormikContext } from 'formik';
+import { JsonValue } from './State/JsonValue';
+
+function State() {
+  const { values, errors, touched } = useFormikContext();
+  return <JsonValue value={{ values, errors, touched }} />;
+}
 
 export const DesignerGroupPreviewTabContent = DynamicFormTheme.flexy(
   'DesignerGroupPreviewTabContent',
-  (props: Pick<DesignerProps, 'Elements' | 'model'>) => {
-    const { model, Elements } = props;
+  (props: Pick<DesignerGroupProps, 'Elements' | 'model' | 'noPreviewControls'>) => {
+    const { model, Elements, noPreviewControls } = props;
     const [readonly, setReadOnly] = useState(false);
     const [state, setState] = useDynamicForm(model);
+    const [showState, setShowState] = useState(false);
 
     return (
       <Flex justify="center">
         <div className="wxd-preview-content">
-          <div>
-            <Radio.Group
-              value={readonly}
-              onChange={(e) => setReadOnly(e.target.value)}
-              options={[
-                { value: false, label: 'Editable' },
-                { value: true, label: 'Read Only' },
-              ]}
-            />
-          </div>
+          {!noPreviewControls && (
+            <div className="wxd-preview-controls">
+              <Radio.Group
+                value={readonly}
+                onChange={(e) => setReadOnly(e.target.value)}
+                options={[
+                  { value: false, label: 'Editable' },
+                  { value: true, label: 'Read Only' },
+                ]}
+              />
 
-          <Divider />
+              <Checkbox checked={showState} onChange={() => setShowState((prev) => !prev)}>
+                Show state
+              </Checkbox>
+            </div>
+          )}
 
           <DynamicForm
             Elements={DesignerUtil.flattenElements(Elements)}
@@ -36,6 +48,7 @@ export const DesignerGroupPreviewTabContent = DynamicFormTheme.flexy(
             initialValue={state}
             onSubmit={setState}
             readonly={readonly}
+            extra={showState && <State />}
           />
         </div>
       </Flex>

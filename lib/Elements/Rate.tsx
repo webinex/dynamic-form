@@ -4,6 +4,7 @@ import { useField } from 'formik';
 import { Rate as _Rate } from 'antd';
 import { Form } from '@webinex/antik';
 import { StarOutlined } from '@ant-design/icons';
+import { DesignerPropMeta } from '@/Designer/DesignerMeta';
 
 export const Rate = createElement({
   id: 'Rate',
@@ -14,7 +15,11 @@ export const Rate = createElement({
     count: Yup.number().required().default(5).label('Count'),
     disabled: Yup.bool()
       .nullable()
-      .meta({ control: 'expression', description: 'Disable when expression is true' }),
+      .label('Disabled When')
+      .meta({
+        control: 'expression',
+        description: 'Disable when expression is true',
+      } satisfies DesignerPropMeta),
   }),
   Component: ({ title, name, disabled, count }) => {
     const [{ value }, , { setValue, setTouched }] = useField<number | undefined>(name);

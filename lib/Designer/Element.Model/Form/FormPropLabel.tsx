@@ -1,4 +1,5 @@
 import { clx } from '@/clx';
+import { DesignerPropMeta } from '@/Designer/DesignerMeta';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import { Button, Space, Tooltip } from 'antd';
@@ -16,15 +17,16 @@ export const FormPropLabel = DynamicFormTheme.flexy(
     const { name, description } = props;
 
     const label = 'label' in description ? (description.label?.toString() ?? name) : name;
+    const meta = 'meta' in description ? (description.meta as DesignerPropMeta | undefined) : undefined;
 
-    if (!('meta' in description) || description.meta?.description == null) {
+    if (!meta || meta.description == null) {
       return label;
     }
 
     return (
       <Space size={0}>
         {label}
-        <Tooltip title={<div className={clx('text-pre-wrap')}>{description.meta.description}</div>}>
+        <Tooltip title={<div className={clx('text-pre-wrap')}>{meta.description}</div>}>
           <Button type="link" icon={<QuestionCircleOutlined />} />
         </Tooltip>
       </Space>
