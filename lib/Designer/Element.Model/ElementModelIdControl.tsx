@@ -3,8 +3,9 @@ import { useDesignerContext } from '../DesignerContext';
 import { Button, Flex, Input, message, Tag } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { validateModelElementId } from '@/Model';
-import type { MessageInstance } from 'antd/es/message/interface';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
+
+type MessageInstance = ReturnType<typeof message.useMessage>[0];
 
 function useEditValue(messageApi: MessageInstance) {
   const { selectedId, model } = useDesignerContext();

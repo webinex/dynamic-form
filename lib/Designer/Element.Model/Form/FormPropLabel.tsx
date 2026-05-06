@@ -1,7 +1,7 @@
 import { clx } from '@/clx';
 import { DesignerPropMeta } from '@/Designer/DesignerMeta';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
-import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Space, Tooltip } from 'antd';
 import { memo } from 'react';
 import { SchemaObjectDescription } from 'yup';

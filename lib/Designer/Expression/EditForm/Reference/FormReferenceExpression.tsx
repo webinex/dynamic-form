@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDesignerContext } from '@/Designer/DesignerContext';
 import { Form } from '@webinex/antik';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
@@ -19,18 +19,26 @@ function resolvePropLabel(element: ModelElement): string | undefined {
   return byProp('title') || byProp('label') || byProp('name') || byProp('text');
 }
 
-function resolveLabel(element: ModelElement): React.ReactNode {
-  const labelPropValue = resolvePropLabel(element);
+export function useResolveLabel() {
   const { Elements } = useDesignerContext();
-  const Element = Elements.find((el) => el.id === element.element);
-  const type = Element?.title ?? Element?.id;
 
-  return (
-    <div title={`${element.id}${labelPropValue ? ` - ${labelPropValue}` : ''}${type ? ` (${type})` : ''}`}>
-      <Tag>{element.id}</Tag>
-      {labelPropValue && <span> {labelPropValue}</span>}
-      {type && <span> ({type})</span>}
-    </div>
+  return useCallback(
+    (element: ModelElement): React.ReactNode => {
+      const labelPropValue = resolvePropLabel(element);
+      const Element = Elements.find((el) => el.id === element.element);
+      const type = Element?.title ?? Element?.id;
+
+      return (
+        <div
+          title={`${element.id}${labelPropValue ? ` - ${labelPropValue}` : ''}${type ? ` (${type})` : ''}`}
+        >
+          <Tag>{element.id}</Tag>
+          {labelPropValue && <span> {labelPropValue}</span>}
+          {type && <span> ({type})</span>}
+        </div>
+      );
+    },
+    [Elements],
   );
 }
 
@@ -39,10 +47,11 @@ export const FormReferenceExpression = DynamicFormTheme.flexy(
   (props: FormReferenceExpressionProps) => {
     const { name } = props;
     const { model } = useDesignerContext();
+    const resolveLabel = useResolveLabel();
 
     const options = useMemo(
       () => model.elements.map((el) => ({ value: el.id, label: resolveLabel(el) })),
-      [model.elements],
+      [model.elements, resolveLabel],
     );
 
     return <Form.Select name={`${name}.ref`} options={options} style={{ minWidth: 0, width: '100%' }} />;
