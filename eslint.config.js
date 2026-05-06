@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'node_modules', '.tmp', '.gh-pages'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -31,7 +31,18 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
-      'no-restricted-imports': ['error', 'lodash'],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: ['lodash'],
+          patterns: [
+            {
+              group: ['@ant-design/icons/*'],
+              message: 'Use named imports from @ant-design/icons instead of deep icon imports.',
+            },
+          ],
+        },
+      ],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
