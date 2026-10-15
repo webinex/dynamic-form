@@ -68,6 +68,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
     "formik": "^2.4.6",
+    "gh-pages": "^6.3.0",
     "globals": "^15.11.0",
     "jsep": "^1.4.0",
     "prettier": "^3.4.2",
