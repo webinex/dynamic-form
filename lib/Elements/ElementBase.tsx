@@ -1,3 +1,6 @@
+import type { FormPropsProps } from '@/Designer';
+import { ModelElement } from '@/Model';
+import React from 'react';
 import * as Yup from 'yup';
 
 export type ElementRenderProps<TCustomProps> = TCustomProps & {
@@ -42,11 +45,25 @@ export interface ElementBase<TPropsSchema extends Yup.ObjectSchema<Yup.AnyObject
   props: TPropsSchema;
 
   /**
-   * Declares the type of the value that this element in form value.
+   * Declares the type of the value that this element holds in the form value.
    * Useful for validation and expression design.
    * @default 'string'
    */
   value?: ElementValueType | ElementComplexValueType;
+
+  /**
+   * Optional schema for the value of this element.
+   * If provided, this schema will be used to validate the value of the element in the form.
+   * If not provided, a default schema will be inferred from the `value` property.
+   */
+  schema?: Yup.AnySchema | ((el: ModelElement) => Yup.AnySchema);
+
+  /**
+   * Renders the designer props for this element.
+   * @param props The props for the form designer.
+   * @returns A React node representing the designer props.
+   */
+  renderDesignerProps?: (props: FormPropsProps) => React.ReactNode;
 }
 
 export function createElement<TPropsSchema extends Yup.ObjectSchema<Yup.AnyObject>>(

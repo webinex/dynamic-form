@@ -13,6 +13,8 @@ import { InputNumber } from './InputNumber';
 import { Switch } from './Switch';
 import { TimePicker } from './TimePicker';
 import { MultiSelect } from './MultiSelect';
+import { Matrix } from './Matrix';
+import { MatrixTable } from './MatrixTable';
 
 export * from './ElementBase';
 export * from './Heading';
@@ -24,6 +26,8 @@ export * from './Style';
 export * from './Checkbox';
 export * from './InputNumber';
 export * from './DateTimePicker';
+export * from './Matrix';
+export * from './MatrixTable';
 
 export const ELEMENTS = Object.assign(
   [
@@ -40,6 +44,8 @@ export const ELEMENTS = Object.assign(
       TimePicker,
       Switch,
       Rate,
+      Matrix,
+      MatrixTable,
     ],
     ['Layout', Heading, Paragraph, Divider],
   ] as [string, ...ElementBase[]][],

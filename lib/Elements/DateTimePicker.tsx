@@ -31,7 +31,6 @@ export const DateTimePicker = createElement({
     return (
       <Form.Item label={title} name={name} required={required}>
         <Form.DatePicker
-          {...Form.DatePicker.defaultProps}
           placeholder={placeholder ?? undefined}
           disabled={disabled ?? undefined}
           showTime={type === 'date-time'}

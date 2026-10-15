@@ -22,9 +22,7 @@ export const Checkbox = createElement({
   Component: ({ title, description, name, disabled }) => {
     return (
       <Form.Item name={name} label={false}>
-        <Form.Checkbox {...Form.Checkbox.defaultProps} disabled={disabled ?? undefined}>
-          {title}
-        </Form.Checkbox>
+        <Form.Checkbox disabled={disabled ?? undefined}>{title}</Form.Checkbox>
         {description && (
           <div>
             <Typography.Text type="secondary" style={{ fontSize: '0.875rem' }}>

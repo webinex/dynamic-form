@@ -1,7 +1,7 @@
 import './ElementModelDesigner.scss';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Button, Space, Tooltip } from 'antd';
-import { FormAutoSubmit, FormProp } from './Form';
+import { FormAutoSubmit, FormProps } from './Form';
 import { useDesignerContext } from '../DesignerContext';
 import { useElementModelSchema } from './useElementModelSchema';
 import { FormValidationBlock } from './Validation';
@@ -14,9 +14,7 @@ import { DynamicFormTheme } from '@/DynamicFormTheme';
 
 export const ElementModelDesigner = DynamicFormTheme.flexy('ElementModelDesigner', () => {
   const { model, set, selected, selectedElement: Element } = useDesignerContext();
-
   const schema = useElementModelSchema();
-  const description = useMemo(() => Element!.props.describe(), [Element!.props]);
 
   const onSubmit = useCallback(
     (values: any) =>
@@ -42,9 +40,12 @@ export const ElementModelDesigner = DynamicFormTheme.flexy('ElementModelDesigner
         <h4>{Element?.title ?? Element?.id}</h4>
         <ElementModelIdControl style={{ marginBottom: '1rem' }} />
         <FormAutoSubmit schema={schema} />
-        {Object.entries(description.fields).map(([name, description]) => (
-          <FormProp key={name} name={`props.${name}`} description={description} />
-        ))}
+
+        {Element!.renderDesignerProps ? (
+          Element?.renderDesignerProps({ Element, name: 'props' })
+        ) : (
+          <FormProps name="props" Element={Element!} />
+        )}
 
         <Form.Item
           name="condition"

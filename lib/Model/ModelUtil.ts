@@ -3,18 +3,30 @@ import { ExpressionUtil } from '@/Model/Expression';
 import { isRequiredValidationRule, Model, ModelElement } from './Model';
 import { ElementBase, ElementComplexValueType, ElementValueType } from '@/Elements';
 
-function initialValue(model: Model) {
+function initialValue(model: Model, Elements: ElementBase[]) {
   return model.elements.reduce(
     (acc, x) => {
-      acc[x.id] = elementInitialValue(x);
+      const Element = Elements.find((e) => e.id === x.element);
+      if (!Element) throw new Error(`Element with id ${x.element} not found in Elements`);
+      acc[x.id] = elementInitialValue(x, Element);
       return acc;
     },
     {} as Record<string, any>,
   );
 }
 
-function elementInitialValue(el: ModelElement) {
-  return el.defaultValue ?? null;
+function elementInitialValue(el: ModelElement, Element: ElementBase) {
+  if (el.defaultValue != null) return el.defaultValue;
+
+  if (Array.isArray(Element.value) && Element.value[0] === 'arrayOf') {
+    return [];
+  }
+
+  if (Element.value === 'object') {
+    return {};
+  }
+
+  return null;
 }
 
 function propsOf(el: ModelElement, values: any) {
@@ -51,7 +63,11 @@ function schemaOfType(type: ElementValueType | ElementComplexValueType): Yup.Sch
 }
 
 function schemaOf(model: ModelElement, Element: ElementBase) {
-  let base = schemaOfType(Element.value ?? 'string');
+  let base =
+    typeof Element.schema === 'function'
+      ? Element.schema(model)
+      : (Element.schema ?? schemaOfType(Element.value ?? 'string'));
+
   let testIndex = -1;
 
   for (const validation of model.validation ?? []) {

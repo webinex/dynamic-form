@@ -18,7 +18,7 @@ export interface DynamicFormFieldSetProps
  * @param props Props for the DynamicFormFieldSet component.
  */
 function useModelChangeEffect(props: DynamicFormFieldSetProps) {
-  const { model, values } = props;
+  const { model, values, Elements } = props;
   const { setFieldValue } = useFormikContext<any>();
   const prev = React.useRef<Record<string, boolean>>();
 
@@ -30,7 +30,9 @@ function useModelChangeEffect(props: DynamicFormFieldSetProps) {
     }
 
     function resetInitialState(el: ModelElement) {
-      setFieldValue(el.id, ModelUtil.elementInitialValue(el));
+      const Element = Elements.find((e) => e.id === el.element);
+      if (!Element) throw new Error(`Element with id ${el.id} not found in Elements`);
+      setFieldValue(el.id, ModelUtil.elementInitialValue(el, Element));
     }
 
     for (const el of model.elements) {
