@@ -1,3 +1,4 @@
+export * from './FormProps';
 export * from './FormProp';
 export * from './FormPropList';
 export * from './FormPropLabel';

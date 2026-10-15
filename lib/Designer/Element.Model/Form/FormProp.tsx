@@ -5,7 +5,7 @@ import { FormPropLabel } from './FormPropLabel';
 import { memo, useCallback } from 'react';
 import { FormExpressionEditable } from '@/Designer/Expression';
 import { FormPropList } from './FormPropList';
-import { List, Typography } from 'antd';
+import { Typography } from 'antd';
 import classNames from 'classnames';
 import { clx } from '@/clx';
 import { DynamicFormTheme } from '@/DynamicFormTheme';
@@ -82,7 +82,7 @@ export const FormProp = DynamicFormTheme.flexy(
 
     if (description.type === 'boolean') {
       return createFormItemElement(
-        <Form.Checkbox {...Form.Checkbox.defaultProps}>
+        <Form.Checkbox>
           <FormPropLabel name={name} description={description} />
         </Form.Checkbox>,
         { label: false },
@@ -91,14 +91,11 @@ export const FormProp = DynamicFormTheme.flexy(
 
     if (description.type === 'object' && 'fields' in description) {
       return (
-        <List
-          dataSource={Object.keys(description.fields)}
-          renderItem={(key) => (
-            <List.Item>
-              <FormProp name={`${name}.${key}`} description={description.fields[key]} />
-            </List.Item>
-          )}
-        />
+        <div>
+          {Object.keys(description.fields).map((key) => (
+            <FormProp key={key} name={`${name}.${key}`} description={description.fields[key]} />
+          ))}
+        </div>
       );
     }
 

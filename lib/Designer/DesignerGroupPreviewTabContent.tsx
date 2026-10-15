@@ -1,5 +1,5 @@
 import './DesignerGroup.scss';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Checkbox, Flex, Radio } from 'antd';
 import { DynamicForm } from '@/DynamicForm';
 import { DesignerUtil } from './DesignerUtil';
@@ -19,7 +19,8 @@ export const DesignerGroupPreviewTabContent = DynamicFormTheme.flexy(
   (props: Pick<DesignerGroupProps, 'Elements' | 'model' | 'noPreviewControls'>) => {
     const { model, Elements, noPreviewControls } = props;
     const [readonly, setReadOnly] = useState(false);
-    const [state, setState] = useDynamicForm(model);
+    const ElementList = useMemo(() => DesignerUtil.flattenElements(Elements), [Elements]);
+    const [state, setState] = useDynamicForm(model, ElementList);
     const [showState, setShowState] = useState(false);
 
     return (
@@ -43,7 +44,7 @@ export const DesignerGroupPreviewTabContent = DynamicFormTheme.flexy(
           )}
 
           <DynamicForm
-            Elements={DesignerUtil.flattenElements(Elements)}
+            Elements={ElementList}
             model={model}
             initialValue={state}
             onSubmit={setState}

@@ -26,7 +26,6 @@ export const TimePicker = createElement({
     return (
       <Form.Item label={title} name={name} required={required}>
         <Form.TimePicker
-          {...Form.DatePicker.defaultProps}
           placeholder={placeholder ?? undefined}
           disabled={disabled ?? undefined}
           allowClear

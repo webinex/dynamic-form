@@ -1,0 +1,15 @@
+.root {
+  padding-block: 0.5rem;
+
+  h5 {
+    margin-block: 0;
+  }
+
+  :global(.wxd-form-matrix-table) {
+    margin-top: 0.5rem;
+  }
+
+  :global(.wxd-matrix-interpretation) {
+    margin-top: 1rem;
+  }
+}

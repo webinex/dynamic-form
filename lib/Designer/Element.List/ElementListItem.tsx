@@ -40,7 +40,10 @@ export const ElementListItem = DynamicFormTheme.flexy('ElementListItem', (props:
   const def = Elements.find((x) => x.id === element.element);
   const Element = def!.Component;
 
-  const initialValue = useMemo(() => ModelUtil.initialValue({ elements: [element] }), [element]);
+  const initialValue = useMemo(
+    () => ModelUtil.initialValue({ elements: [element] }, Elements),
+    [element, [Element]],
+  );
 
   useLayoutEffect(() => {
     if (animate && selected === element.id) {

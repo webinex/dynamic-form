@@ -40,7 +40,6 @@ export const InputNumber = createElement({
       <Form.Item label={title} name={name} required={required}>
         <Form.InputNumber
           prefix={prefix}
-          {...Form.InputNumber.defaultProps}
           placeholder={placeholder ?? undefined}
           disabled={disabled ?? undefined}
           min={min ?? undefined}

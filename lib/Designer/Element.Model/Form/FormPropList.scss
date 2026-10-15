@@ -9,7 +9,41 @@
 }
 
 .wxd-form-prop-list {
+  $extra-width: 30px;
+  $extra-space: 10px;
+
+  padding-left: 20px;
+  padding-block: 10px;
+  border-left: 1px solid #eee;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 5px;
+    height: 1px;
+    background-color: #eee;
+  }
+
+  &::before {
+    top: 0;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+
   .ant-list-footer {
     padding-bottom: 0;
+  }
+
+  .ant-list-item-extra {
+    margin-inline-start: $extra-space !important;
+    width: $extra-width;
+  }
+
+  .wxd-form-prop-list {
+    margin-right: -#{$extra-width + $extra-space};
   }
 }
